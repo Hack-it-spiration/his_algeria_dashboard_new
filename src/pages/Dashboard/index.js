@@ -1,11 +1,9 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
 import MetaTags from "react-meta-tags";
 import {
   Container,
   Row,
   Col,
-  Button,
   Card,
   CardBody,
   Input,
@@ -28,13 +26,7 @@ import { getChartsData as onGetChartsData } from "../../store/actions";
 import modalimage1 from "../../assets/images/product/img-7.png";
 import modalimage2 from "../../assets/images/product/img-4.png";
 
-// Pages Components
-import WelcomeComp from "./WelcomeComp";
-import MonthlyEarning from "./MonthlyEarning";
-import SocialSource from "./SocialSource";
-import ActivityComp from "./ActivityComp";
-import TopCities from "./TopCities";
-import LatestTranaction from "./LatestTranaction";
+
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb";
@@ -42,26 +34,117 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 //i18n
 import { withTranslation } from "react-i18next";
 
+import {GoogleMap, useJsApiLoader , Marker , DirectionsRenderer , InfoWindow } from "@react-google-maps/api";
+import React, {useContext, useRef, useState} from "react";
+import {Backdrop, Button, CircularProgress, TextField, Toolbar , Paper , List , Autocomplete} from "@mui/material";
+import './styles.css';
+// import CarsWindowInfo from "./Compounents/carsWindowInfo.Compounent";
+// import CarteVehicule from "../gestionverou/Compounents/Card";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import {useEffect} from "react";
 //redux
 import { useSelector, useDispatch } from "react-redux";
+const bounds=[{
+  label : 'Bound1',
+  id : 'Bound1',
+  position : {
+    lat : 48.5584,
+    lng: 2.2945
+  },
+  speed : '75',
+  heat : '55',
+  AM : {
+    fullName : 'Metidji Sid Ahmed',
+    email : 'is_metidji@esi.dz'
+  }
+
+}, {
+  label : 'Bound2',
+  id : 'Bound2',
+  position : {
+    lat : 48.8570,
+    lng: 2.2730
+  },
+  speed : '20',
+  heat : '20',
+  AM : {
+    fullName : 'Youcef belaili',
+    email : 'iy_belaili@esi.dz'
+  }
+},{
+  label : 'Bound3',
+  id : 'Bound3',
+  position : {
+    lat : 48.7570,
+    lng: 2.2330
+  },
+  speed : '35K',
+  heat : '40',
+  AM : {
+    fullName : 'Joe Goldberg',
+    email : 'ij_goldberg@esi.dz'
+  }
+} ,{
+  label: 'Bound4',
+  id : 'Bound4',
+  position : {
+    lat : 48.7230,
+    lng: 2.2550
+  },
+  speed : '45',
+  heat : '65',
+  AM : {
+    fullName : 'Eren Yeager',
+    email : 'ie_yeager@esi.dz'
+  }
+}
+]
+
+const segments=[
+    {
+      name : "Segment 1",
+      boundStartId : 'Bound1',
+      boundEndId : 'Bound2'
+    },
+    {
+      name : "Segment 2",
+      boundStartId : 'Bound2',
+      boundEndId : 'Bound3'
+    }
+]
+const  CarsWindowInfo=()=>{
+  return <h1>CARS WINDOW INFO</h1>
+}
+
 
 const Dashboard = props => {
   const [modal, setmodal] = useState(false);
   const [subscribemodal, setSubscribemodal] = useState(false);
 
+
   const { chartsData } = useSelector(state => ({
     chartsData: state.Dashboard.chartsData
   }));
 
-  const reports = [
-    { title: "Orders", iconClass: "bx-copy-alt", description: "1,235" },
-    { title: "Revenue", iconClass: "bx-archive-in", description: "$35, 723" },
-    {
-      title: "Average Price",
-      iconClass: "bx-purchase-tag-alt",
-      description: "$16.2",
-    },
-  ];
+  const [WindowInfoStatus, setWindowInfoStatus] = useState({
+    isOpen : false ,
+    car: bounds[0]
+  });
+  const [directionsResponse, setDirectionsResponse] = useState(null);
+
+  const [actualBoundStart, setActualBoundStart]=useState(null);
+  const [actualBoundEnd , setActualBoundEnd]=useState(null);
+  const [distance, setDistance] = useState('')
+  const [duration, setDuration] = useState('')
+  const markerIcon = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+  /** @type React.MutableRefObject<HTMLInputElement> */
+  const originRef = useRef()
+  /** @type React.MutableRefObject<HTMLInputElement> */
+  const destiantionRef = useRef()
+  const {isLoaded}= useJsApiLoader({
+    googleMapsApiKey : "AIzaSyDwCTYOj2SWL6bt2rz_k8_bcXirZtJNB3g",
+    libraries: ['places']
+  })
 
   useEffect(() => {
     setTimeout(() => {
@@ -86,11 +169,113 @@ const Dashboard = props => {
     dispatch(onGetChartsData("yearly"));
   }, [dispatch]);
 
+  useEffect(()=>{
+    if(actualBoundStart && actualBoundEnd){
+      calculateRoute();
+    }else{
+      setDirectionsResponse(null);
+    }
+  },[actualBoundStart , actualBoundEnd])
+
+  const calculateCenterMap=()=>{
+    let sumlat = 0;
+    let sumlng = 0;
+    bounds.forEach(car=>{
+      sumlat += car.position.lat;
+      sumlng += car.position.lng;
+    })
+    return  {
+      lat : sumlat/bounds.length,
+      lng: sumlng/bounds.length
+    }
+  }
+
+  async function calculateRoute() {
+
+    console.log("IM GOING TO SEND =" , actualBoundStart)
+    console.log("IM GOING TO SEND =",actualBoundEnd)
+    // eslint-disable-next-line no-undef
+    const directionsService = new google.maps.DirectionsService()
+    const results = await directionsService.route({
+      origin: new  window.google.maps.LatLng( actualBoundStart.position.lat , actualBoundStart.position.lng),
+      destination: new window.google.maps.LatLng( actualBoundEnd.position.lat , actualBoundEnd.position.lng),
+      // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING,
+    })
+    setDirectionsResponse(results)
+    setDistance(results.routes[0].legs[0].distance.text)
+    setDuration(results.routes[0].legs[0].duration.text)
+  }
+
+  if(!isLoaded){
+    return(
+        <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open
+            // onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+    )
+
+  }
+  const setInfoWindowData=( car )=>{
+    setWindowInfoStatus( oldState=>{  return {...oldState , isOpen : true , car: car} })
+  }
+
+  const calculateBoundMarkerOpacity=(bound)=>{
+    // if the user didin't select yet any bound
+    if(!actualBoundStart && !actualBoundEnd){
+      return 1
+    }
+    // if that bound is either the start or the end
+      if(bound.id===actualBoundStart?.id || bound.id===actualBoundEnd?.id){
+        return 1
+      }
+
+    // the started bound is different  and the end bound is not defined yet
+    if(actualBoundStart && !actualBoundEnd){
+          const potentialSegments= segments.filter(segment=>( segment.boundStartId===actualBoundStart.id && segment.boundEndId===bound.id));
+          return potentialSegments.length ? 1 : 0.3
+    }
+    // the start and the end bound are specified but the actual bound isn't one of them
+    else if(actualBoundStart && actualBoundEnd){
+        return 0.3
+
+    }
+
+  }
+  const getPotentialEndBoundsOfGivenStartBound=()=>{
+      if(!actualBoundStart) {return null}
+      else{
+        let endBoundsId= segments.filter(segment=>segment.boundStartId ===actualBoundStart.id).map(segment=>segment.boundEndId);
+        console.log("END BOUNDS ID =",endBoundsId)
+        return bounds.filter(bound=>endBoundsId.includes(bound.id));
+      }
+  }
+  const updateBounds=(clickedBound)=>{
+    if(!actualBoundStart && !actualBoundStart){
+      setActualBoundStart(clickedBound)
+    }else if(actualBoundStart && !actualBoundEnd){
+      // disable the selection
+      if(actualBoundStart.id===clickedBound.id){
+        setActualBoundStart(null)
+      }else{
+        setActualBoundEnd(clickedBound)
+      }
+    }
+    else if(actualBoundStart && actualBoundEnd){
+      // setActualBoundStart(null);
+      setActualBoundEnd(null);
+      setActualBoundStart(actualBoundStart);
+      setDirectionsResponse(null);
+    }
+  }
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-          <title>Dashboard | Skote - React Admin & Dashboard Template</title>
+          <title>Dashboard | HIS ALGERIA</title>
         </MetaTags>
         <Container fluid>
           {/* Render Breadcrumb */}
@@ -98,280 +283,115 @@ const Dashboard = props => {
             title={props.t("Dashboards")}
             breadcrumbItem={props.t("Dashboard")}
           />
-
-          <Row>
-            <Col xl="4">
-              <WelcomeComp />
-              <MonthlyEarning />
-            </Col>
-            <Col xl="8">
-              <Row>
-                {/* Reports Render */}
-                {reports.map((report, key) => (
-                  <Col md="4" key={"_col_" + key}>
-                    <Card className="mini-stats-wid">
-                      <CardBody>
-                        <div className="d-flex">
-                          <div className="flex-grow-1">
-                            <p className="text-muted fw-medium">
-                              {report.title}
-                            </p>
-                            <h4 className="mb-0">{report.description}</h4>
-                          </div>
-                          <div className="avatar-sm rounded-circle bg-primary align-self-center mini-stat-icon">
-                            <span className="avatar-title rounded-circle bg-primary">
-                              <i
-                                className={
-                                  "bx " + report.iconClass + " font-size-24"
-                                }
-                              ></i>
-                            </span>
-                          </div>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
-
-              <Card>
-                <CardBody>
-                  <div className="d-sm-flex flex-wrap">
-                    <h4 className="card-title mb-4">Email Sent</h4>
-                    <div className="ms-auto">
-                      <ul className="nav nav-pills">
-                        <li className="nav-item">
-                          <Link
-                            to="#"
-                            className={classNames(
-                              { active: periodType === "weekly" },
-                              "nav-link"
-                            )}
-                            onClick={() => {
-                              onChangeChartPeriod("weekly");
-                            }}
-                            id="one_month"
-                          >
-                            Week
-                          </Link>{" "}
-                        </li>
-                        <li className="nav-item">
-                          <Link
-                            to="#"
-                            className={classNames(
-                              { active: periodType === "monthly" },
-                              "nav-link"
-                            )}
-                            onClick={() => {
-                              onChangeChartPeriod("monthly");
-                            }}
-                            id="one_month"
-                          >
-                            Month
-                          </Link>
-                        </li>
-                        <li className="nav-item">
-                          <Link
-                            to="#"
-                            className={classNames(
-                              { active: periodType === "yearly" },
-                              "nav-link"
-                            )}
-                            onClick={() => {
-                              onChangeChartPeriod("yearly");
-                            }}
-                            id="one_month"
-                          >
-                            Year
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  {/* <div className="clearfix"></div> */}
-                  <StackedColumnChart periodData={periodData} />
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col xl="4">
-              <SocialSource />
-            </Col>
-            <Col xl="4">
-              <ActivityComp />
-            </Col>
-
-            <Col xl="4">
-              <TopCities />
-            </Col>
-          </Row>
-
-          <Row>
-            <Col lg="12">
-              <LatestTranaction />
-            </Col>
-          </Row>
-        </Container>
-      </div>
-
-      {/* subscribe ModalHeader */}
-      <Modal
-        isOpen={subscribemodal}
-        role="dialog"
-        autoFocus={true}
-        centered
-        data-toggle="modal"
-        toggle={() => {
-          setSubscribemodal(!subscribemodal);
-        }}
-      >
-        <div>
-          <ModalHeader
-            className="border-bottom-0"
-            toggle={() => {
-              setSubscribemodal(!subscribemodal);
-            }}
-          ></ModalHeader>
-        </div>
-        <div className="modal-body">
-          <div className="text-center mb-4">
-            <div className="avatar-md mx-auto mb-4">
-              <div className="avatar-title bg-light  rounded-circle text-primary h1">
-                <i className="mdi mdi-email-open"></i>
-              </div>
+          <div className="d-flex justify-content-evenly mb-2 mt-2">
+            <div id={"startBoundInput"}>
+              <Autocomplete
+                  value={actualBoundStart}
+                  onChange={(event, newValue) => {
+                    if(newValue == null){
+                      setActualBoundEnd(null);
+                    }
+                    setActualBoundStart(newValue);
+                  }}
+                  id="controllable-states-demo"
+                  options={bounds}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => <TextField {...params} label="start bound" />}
+              />
             </div>
-
-            <div className="row justify-content-center">
-              <div className="col-xl-10">
-                <h4 className="text-primary">Subscribe !</h4>
-                <p className="text-muted font-size-14 mb-4">
-                  Subscribe our newletter and get notification to stay update.
-                </p>
-
-                <div
-                  className="input-group rounded bg-light"
-                >
-                  <Input
-                    type="email"
-                    className="form-control bg-transparent border-0"
-                    placeholder="Enter Email address"
-                  />
-                  <Button color="primary" type="button" id="button-addon2">
-                    <i className="bx bxs-paper-plane"></i>
-                  </Button>
-                </div>
-              </div>
+            <div id={"endBoundInput"}>
+              <Autocomplete
+                  disabled={!actualBoundStart}
+                  value={actualBoundEnd}
+                  onChange={(event, newValue) => {
+                    setActualBoundEnd(newValue);
+                  }}
+                  id="controllable-states-demo"
+                  options={getPotentialEndBoundsOfGivenStartBound()}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => <TextField {...params} label="end bound" />}
+              />
             </div>
           </div>
-        </div>
-      </Modal>
 
-      <Modal
-        isOpen={modal}
-        role="dialog"
-        autoFocus={true}
-        centered={true}
-        className="exampleModal"
-        tabIndex="-1"
-        toggle={() => {
-          setmodal(!modal);
-        }}
-      >
-        <div>
-          <ModalHeader
-            toggle={() => {
-              setmodal(!modal);
-            }}
-          >
-            Order Details
-          </ModalHeader>
-          <ModalBody>
-            <p className="mb-2">
-              Product id: <span className="text-primary">#SK2540</span>
-            </p>
-            <p className="mb-4">
-              Billing Name: <span className="text-primary">Neal Matthews</span>
-            </p>
 
-            <div className="table-responsive">
-              <Table className="table table-centered table-nowrap">
-                <thead>
-                  <tr>
-                    <th scope="col">Product</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">
-                      <div>
-                        <img src={modalimage1} alt="" className="avatar-sm" />
-                      </div>
-                    </th>
-                    <td>
-                      <div>
-                        <h5 className="text-truncate font-size-14">
-                          Wireless Headphone (Black)
-                        </h5>
-                        <p className="text-muted mb-0">$ 225 x 1</p>
-                      </div>
-                    </td>
-                    <td>$ 255</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">
-                      <div>
-                        <img src={modalimage2} alt="" className="avatar-sm" />
-                      </div>
-                    </th>
-                    <td>
-                      <div>
-                        <h5 className="text-truncate font-size-14">
-                          Hoodie (Blue)
-                        </h5>
-                        <p className="text-muted mb-0">$ 145 x 1</p>
-                      </div>
-                    </td>
-                    <td>$ 145</td>
-                  </tr>
-                  <tr>
-                    <td colSpan="2">
-                      <h6 className="m-0 text-end">Sub Total:</h6>
-                    </td>
-                    <td>$ 400</td>
-                  </tr>
-                  <tr>
-                    <td colSpan="2">
-                      <h6 className="m-0 text-end">Shipping:</h6>
-                    </td>
-                    <td>Free</td>
-                  </tr>
-                  <tr>
-                    <td colSpan="2">
-                      <h6 className="m-0 text-end">Total:</h6>
-                    </td>
-                    <td>$ 400</td>
-                  </tr>
-                </tbody>
-              </Table>
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              type="button"
-              color="secondary"
-              onClick={() => {
-                setmodal(!modal);
+          <GoogleMap
+              style={{height : '100%'}}
+              center={ WindowInfoStatus.isOpen ? WindowInfoStatus.car.position :  calculateCenterMap()}
+              zoom={10}
+              mapContainerStyle={{width : '100%' , height : '80vh'}}
+              options={{
+                zoomControl: false,
+                streetViewControl : false,
+                mapTypeControl: false,
+                fullscreenControl: false
               }}
-            >
-              Close
-            </Button>
-          </ModalFooter>
-        </div>
-      </Modal>
+          >
+            {bounds.map(bound=>{
+              return(
+                  <Marker key={bound.label} position={bound.position}
+                          label={{
+                            // text: car.name,
+                            // fontFamily: "Material Icons",
+                            color: "#ffffff",
+                            fontSize: "10px",
+                          }}
+                          opacity={calculateBoundMarkerOpacity(bound)}
+                          disabled={calculateBoundMarkerOpacity(bound)!==1}
+                          // icon={'https://lh3.google.com/u/0/d/1VDkBVYwMu-hau9j1SiW4YJelZ_9ZccDN=w1193-h840-iv1'}
+                          onClick={()=>{
+
+                            setInfoWindowData(bound)
+                            updateBounds(bound)
+                          }}
+                  />
+              )
+
+            })}
+            {/*<Toolbar className={"filterBar"}>*/}
+            {/*    <h1>CARS VIEW</h1>*/}
+            {/*    <div className="d-flex align-items-center">*/}
+            {/*        <div className="col-4">*/}
+            {/*            <Autocomplete>*/}
+            {/*                <TextField className="mt-3 mb-3" id="standard-basic" label="From" variant="standard" ref={originRef} />*/}
+            {/*            </Autocomplete>*/}
+            {/*        </div>*/}
+            {/*        <div className="col-4">*/}
+            {/*            <Autocomplete>*/}
+            {/*                <TextField className="mt-3 mb-3" id="standard-basic" label="To" variant="standard" ref={destiantionRef} />*/}
+            {/*            </Autocomplete>*/}
+            {/*        </div>*/}
+            {/*        <div className="col-4">*/}
+            {/*            <Button onClick={()=>calculateRoute()} className="w-100" variant="contained">Calculate Route</Button>*/}
+
+            {/*        </div>*/}
+            {/*    </div></Toolbar>*/}
+
+            {/*<Marker position={Marker2Pos} label={{*/}
+            {/*    text: "Car 2",*/}
+            {/*    // fontFamily: "Material Icons",*/}
+            {/*    color: "#ffffff",*/}
+            {/*    fontSize: "10px",*/}
+            {/*}}  icon={markerIcon}*/}
+            {/*        onClick={()=>setInfoWindowData({position : Marker2Pos})}*/}
+            {/*/>*/}
+
+
+            {/*{WindowInfoStatus.isOpen ?  (*/}
+            {/*    <InfoWindow onCloseClick={()=>{*/}
+            {/*      setWindowInfoStatus(oldState=>{ return {...oldState , isOpen : false }});*/}
+            {/*    }}  position={WindowInfoStatus.car.position}  >*/}
+            {/*      <CarsWindowInfo car={WindowInfoStatus.car}/>*/}
+            {/*    </InfoWindow>*/}
+            {/*): null}*/}
+
+
+
+            {directionsResponse && (
+                <DirectionsRenderer directions={directionsResponse} />
+            )}          </GoogleMap>
+        </Container>
+      </div>
     </React.Fragment>
   );
 };

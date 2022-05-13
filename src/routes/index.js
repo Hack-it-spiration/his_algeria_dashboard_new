@@ -169,9 +169,12 @@ import Pages500 from "../pages/Utility/pages-500"
 import ContactsGrid from "../pages/Contacts/contacts-grid"
 import ContactsList from "../pages/Contacts/ContactList/contacts-list"
 import ContactsProfile from "../pages/Contacts/ContactsProfile/contacts-profile"
+import Accidents from "../pages/Dashboard/Accidents";
 
+// severity , startTime , endTime , segment , location
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
+  { path : "/dashboard/:segmentId/accidents", component : Accidents},
   { path: "/dashboard-saas", component: DashboardSaas },
   { path: "/dashboard-crypto", component: DashboardCrypto },
   { path: "/blog", component: Blog },
