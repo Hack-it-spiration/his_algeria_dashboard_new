@@ -4,6 +4,10 @@ import {Container} from "reactstrap";
 import React from "react";
 import {useParams} from "react-router-dom";
 import MaterialTable from "material-table";
+import {tableIcons , tableLang} from "../../materialTableOptions/Widget";
+import {withTranslation} from "react-i18next";
+import {Add, AddBox} from "@material-ui/icons";
+
 
 const Accidents =()=>{
     let { segmentId } = useParams();
@@ -21,9 +25,9 @@ const Accidents =()=>{
                         breadcrumbItem={"Dashboard"}
                     />
                     <MaterialTable
+                        title="Free Action Preview"
                         icons={tableIcons}
                         localization={tableLang}
-                        title="Multiple Actions Preview"
                         columns={[
                             { title: 'Name', field: 'name' },
                             { title: 'Surname', field: 'surname' },
@@ -40,14 +44,10 @@ const Accidents =()=>{
                         ]}
                         actions={[
                             {
-                                icon: 'save',
-                                tooltip: 'Save User',
-                                onClick: (event, rowData) => alert("You saved " + rowData.name)
-                            },
-                            {
-                                icon: 'delete',
-                                tooltip: 'Delete User',
-                                onClick: (event, rowData) => confirm("You want to delete " + rowData.name)
+                                icon: ()=><AddBox/>,
+                                tooltip: 'Add User',
+                                isFreeAction: true,
+                                onClick: (event) => alert("You want to add a new row")
                             }
                         ]}
                     />
@@ -57,4 +57,4 @@ const Accidents =()=>{
     )
 }
 
-export default Accidents
+export default withTranslation()(Accidents);

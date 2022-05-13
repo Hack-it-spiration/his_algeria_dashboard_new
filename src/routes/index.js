@@ -174,7 +174,7 @@ import Accidents from "../pages/Dashboard/Accidents";
 // severity , startTime , endTime , segment , location
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
-  { path : "/dashboard/:segmentId/accidents", component : Accidents},
+  { path : "/dash", component : Accidents},
   { path: "/dashboard-saas", component: DashboardSaas },
   { path: "/dashboard-crypto", component: DashboardCrypto },
   { path: "/blog", component: Blog },

@@ -1,13 +1,14 @@
 
-import {   AddBox , Delete , Edit, ArrowDownward, Check, ChevronLeft, ChevronRight, Clear, DeleteOutline, FilterList, FirstPage, LastPage, Remove, SaveAlt, Search, ViewColumnOutlined , AddIc} from '@mui/icons-material';
+import {   AddBox , Delete , Edit, ArrowDownward, Check, ChevronLeft, ChevronRight, Clear, DeleteOutline, FilterList, FirstPage, LastPage, Remove, SaveAlt, Search, ViewColumnOutlined , Add} from '@mui/icons-material';
 import React, { forwardRef } from 'react'
 // import AddIcon from '../icons/Add.svg'
 // import DeleteIcon from '../icons/Delete.svg'
 // import ModifyIcon from '../icons/Edit.svg'
 
+
 /* Default SVG TABLE Icon Ref */
 export const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+    Add: forwardRef((props, ref) => <Add {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
     Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
     Delete: forwardRef((props, ref) => <Delete  {...props} ref={ref} />),
@@ -26,6 +27,23 @@ export const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumnOutlined {...props} ref={ref} />)
 };
 
+tableIcons.Add.displayName="AddIcon"
+tableIcons.Check.displayName="CheckIcon"
+tableIcons.Clear.displayName="clearIcon"
+tableIcons.Delete.displayName="deleteIcon"
+tableIcons.DetailPanel.displayName="deleteIcon"
+tableIcons.Edit.displayName="editIcon"
+tableIcons.Export.displayName="editIcon"
+tableIcons.Filter.displayName="editIcon"
+tableIcons.FirstPage.displayName="editIcon"
+tableIcons.LastPage.displayName="editIcon"
+tableIcons.NextPage.displayName="editIcon"
+tableIcons.PreviousPage.displayName="editIcon"
+tableIcons.ResetSearch.displayName="editIcon"
+tableIcons.Search.displayName="editIcon"
+tableIcons.SortArrow.displayName="editIcon"
+tableIcons.ThirdStateCheck.displayName="editIcon"
+tableIcons.ViewColumn.displayName="editIcon"
 
 /* Default lang for table component */
 export const tableLang = {
