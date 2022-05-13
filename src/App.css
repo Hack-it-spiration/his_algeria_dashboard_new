@@ -1,0 +1,71 @@
+/*poppins font*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root {
+    --main-blue : #648CFF;
+    --main-gray-blue : #353854;
+    --main-green : #009099;
+    --main-white : #ffffff;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+
+.main-blue{
+    color : var(--main-blue) !important;
+}
+
+.main-gray{
+    color: var(--main-gray-blue) !important;
+}
+
+.main-white{
+    color : white !important;
+}
+.main-blue-bg{
+    background-color : var(--main-blue) !important;
+}
+.main-gray-bg{
+    background-color: var(--main-gray-blue) !important;
+}
+.main-white-bg{
+    background-color : var(--main-white) !important;
+}
+
+.main-green{
+    color: var(--main-green) !important;
+}
+
+.main-green-bg{
+    color: var(--main-green) !important;
+}
+
+ /*Side bar stuff*/
+.vertical-menu{
+    background-color: var(--main-blue) !important;
+}
+
+.navbar-brand-box{
+    background-color: var(--main-gray-blue);
+    color: white;
+}
+
+li.mm-active{
+    background-color: var(--main-green) ;
+}
+
+
+.metismenu > li > a > * {
+    color: white !important;
+}
+
+.menu-title{
+    font-size: 1rem !important;
+    color: var(--main-white) !important;
+}
+
+.navbar-header{
+    background-color: var(--main-blue) !important;
+}
+
+.page-title-box{
+    font-size: 2rem !important;
+}
