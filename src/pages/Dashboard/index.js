@@ -17,8 +17,7 @@ import { Link } from "react-router-dom";
 
 import classNames from "classnames";
 
-//import Charts
-import StackedColumnChart from "./StackedColumnChart";
+
 
 //import action
 import { getChartsData as onGetChartsData } from "../../store/actions";
