@@ -8,9 +8,6 @@ import Profile from "./auth/profile/reducer"
 import ecommerce from "./e-commerce/reducer"
 
 
-//crypto
-import crypto from "./crypto/reducer"
-
 //invoices
 import invoices from "./invoices/reducer"
 
