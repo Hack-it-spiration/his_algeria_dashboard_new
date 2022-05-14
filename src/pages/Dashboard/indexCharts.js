@@ -1,11 +1,11 @@
 import Chart from "react-apexcharts";
 import moment from "moment";
 
-const DetailCharts=({title})=>{
+const DetailCharts=({title , data})=>{
     const series= [
         {
             name: "series-1",
-            data: [30, 40, 45, 50, 49, 20, 60, 50]
+            data: data
         }
     ]
 
@@ -25,7 +25,6 @@ const DetailCharts=({title})=>{
                         color: "#fff",
                         background: "#775DD0"
                     },
-
                     text: "Present"
                 },
                 offsetY: 4

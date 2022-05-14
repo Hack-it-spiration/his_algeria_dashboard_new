@@ -27,20 +27,23 @@ export default function BasicCard(props) {
     }
     return (
 
-        <Card sx={{ width: '20%' , margin: '20px' , backgroundColor : colorCard.green}}>
+        <Card sx={{ width: '20%' , margin: '20px' , backgroundColor : severitiesCorresponds[props.severity]}}>
             <CardContent className={"p-0"} sx={{ display: 'flex' , flexDirection:'column', justifyContent : 'center', backgroundColor : '#ffffff'}}>
-                <CardActionArea onClick={()=>props.changeTitle(props.name)} style={{padding : "2rem"}}>
+                <CardActionArea onClick={()=>{
+                    props.changeTitle(props.name);
+                    props.changeData()
+                }} style={{padding : "2rem"}}>
                     {/*<Typography sx={{ fontSize: 14 , textAlign: 'center' }} color="text.secondary" gutterBottom>*/}
                     {/*    Word of the Day*/}
                     {/*</Typography>*/}
-                    <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', textAlign: 'center' }} >
+                    <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', textAlign: 'center' , color : severitiesCorresponds[props.severity]  }} >
                         <br/>
                         {props.name}
                     </Typography>
                     {/*<Typography sx={{ mb: 1.5 }} color="text.secondary">*/}
                     {/*    adjective*/}
                     {/*</Typography>*/}
-                    <Typography variant="body2" sx={{ textAlign: 'center' }} >
+                    <Typography variant="body2" sx={{ textAlign: 'center' , color :  severitiesCorresponds[props.severity] }} >
                         {props.info}
                     </Typography>
                 </CardActionArea>

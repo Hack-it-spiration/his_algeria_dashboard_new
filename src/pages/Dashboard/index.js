@@ -176,6 +176,7 @@ const Dashboard = props => {
   const [periodData, setPeriodData] = useState([]);
   const [periodType, setPeriodType] = useState("yearly");
   const [actaulTitleCharts , setActualTitleCharts]=useState('Number of Cars per day')
+  const [actaulDataCharts , setActaulDataCharts]=useState( [30, 40, 45, 50, 49, 20, 60, 50])
   useEffect(() => {
     setPeriodData(chartsData);
   }, [chartsData]);
@@ -420,12 +421,12 @@ const Dashboard = props => {
           {actualSegment && (
               <React.Fragment>
                 <div style={stylingObject.cardContainer}>
-                  <BasicCard severity={1} changeTitle={setActualTitleCharts} name={'Véhicule'} info={'200 / heure'} link={`/dashboard/${actualSegment.uuid}/traficCheckIn`}/>
-                  <BasicCard severity={1} changeTitle={setActualTitleCharts} name={'Metéo'} info={'Tres Bien'} link={`/dashboard/${actualSegment.uuid}/weather`}/>
-                  <BasicCard severity={3} changeTitle={setActualTitleCharts} name={'Etat de route'} info={'Risqué'} link={`/dashboard/${actualSegment.uuid}/roadStatus`} />
-                  <BasicCard  severity={4} changeTitle={setActualTitleCharts} name={'Accident'} info={'En danger'} link={`/dashboard/${actualSegment.uuid}/accidents`} />
+                  <BasicCard severity={1} changeData={()=>setActaulDataCharts([30, 40, 45, 50, 49, 20, 60, 50])} changeTitle={setActualTitleCharts} name={'Véhicule'} info={'200 / heure'} link={`/dashboard/${actualSegment.uuid}/traficCheckIn`}/>
+                  <BasicCard severity={1} changeData={()=>setActaulDataCharts([15, 19, 16, 25, 13, 24, 20, 16])}  changeTitle={setActualTitleCharts} name={'Metéo'} info={'Tres Bien'} link={`/dashboard/${actualSegment.uuid}/weather`}/>
+                  <BasicCard severity={3}  changeData={()=>setActaulDataCharts([4, 4, 5, 5, 5, 5, 5, 5])}  changeTitle={setActualTitleCharts} name={'Etat de route'} info={'Risqué'} link={`/dashboard/${actualSegment.uuid}/roadStatus`} />
+                  <BasicCard  severity={4}  changeData={()=>setActaulDataCharts([4, 2, 2, 1, 3, 3, 4, 1])}  changeTitle={setActualTitleCharts} name={'Accident'} info={'En danger'} link={`/dashboard/${actualSegment.uuid}/accidents`} />
                 </div>
-                <DetailCharts title={actaulTitleCharts}/>
+                <DetailCharts data={actaulDataCharts} title={actaulTitleCharts}/>
               </React.Fragment>
 
 
