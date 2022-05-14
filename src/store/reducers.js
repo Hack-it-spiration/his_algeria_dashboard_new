@@ -6,17 +6,9 @@ import Profile from "./auth/profile/reducer"
 
 
 
-//projects
-import projects from "./projects/reducer"
 
-//tasks
-import tasks from "./tasks/reducer"
 
-//contacts
-import contacts from "./contacts/reducer"
 
-//mails
-import mails from "./mails/reducer";
 
 //Dashboard
 import Dashboard from "./dashboard/reducer";

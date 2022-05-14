@@ -15,7 +15,6 @@ import {
 // Layout Related Components
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import Footer from "./Footer";
 import RightSidebar from "../CommonForBoth/RightSidebar";
 
 //redux
@@ -147,7 +146,7 @@ const Layout = props => {
           isMobile={isMobile}
         />
         <div className="main-content">{props.children}</div>
-        <Footer />
+
       </div>
       {showRightSidebar ? <RightSidebar /> : null}
     </React.Fragment>
