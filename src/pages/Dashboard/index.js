@@ -344,10 +344,10 @@ const Dashboard = props => {
           <GoogleMap
               style={{height : '100%'}}
               center={ WindowInfoStatus.isOpen ?  { lat : WindowInfoStatus.car.location[0] , lng : WindowInfoStatus.car.location[1] }  :  calculateCenterMap()}
-              zoom={10}
+              zoom={8}
               mapContainerStyle={{width : '100%' , height : '80vh'}}
               options={{
-                zoomControl: false,
+                zoomControl: true,
                 streetViewControl : false,
                 mapTypeControl: false,
                 fullscreenControl: false
