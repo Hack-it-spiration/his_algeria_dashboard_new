@@ -36,11 +36,15 @@ import contacts from "./contacts/reducer"
 //mails
 import mails from "./mails/reducer";
 
-//Dashboard 
+//Dashboard
 import Dashboard from "./dashboard/reducer";
 
 //Dasboard saas
 import DashboardSaas from "./dashboard-saas/reducer";
+
+import boundsReducer from "./bounds/reducer";
+import segmentsReducer from "./segments/reducer";
+
 
 const rootReducer = combineReducers({
   // public
@@ -59,7 +63,9 @@ const rootReducer = combineReducers({
   tasks,
   contacts,
   Dashboard,
-  DashboardSaas
+  DashboardSaas,
+  boundsReducer,
+  segmentsReducer
 })
 
 export default rootReducer

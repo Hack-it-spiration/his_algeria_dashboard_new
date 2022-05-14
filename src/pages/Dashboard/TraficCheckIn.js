@@ -12,36 +12,35 @@ import moment from "moment";
 const data=[
     {
         time : new Date(),
-        accidentType : "CAR-CAR",
-        severity : 3,
-        vehiculesNumbers : 6,
-        injuriesNumbers : 5,
-        deadNumbers : 5
+        vehiculeType : 'CAR'
+    },{
+        time : new Date(),
+        vehiculeType : "TRUCK"
+    },{
+        time : new Date(),
+        vehiculeType : "MOTORCYCLE"
     }
 ]
 
-const Accidents =()=>{
+const TraficCheckin =()=>{
     let { segmentId } = useParams();
     const columns= [
         { title: 'Time',  render: rowData => <div>{moment(rowData.time).format('llll')}</div> },
         // { title: 'Segment', field: 'name' },
-        { title: 'Accident Type', field : 'accidentType', render: rowData => <div>{rowData.accidentType}</div> },
-        { title: 'Severity', render : rowData => <div>{rowData.severity}</div> },
-        { title : 'Vehicules Numbers' , render : rowData=><div>{rowData.vehiculesNumbers}</div>},
-        { title : 'Injuries Numbers' , render : rowData=><div>{rowData.injuriesNumbers}</div> },
-        { title : 'Dead Numbers' , render : rowData=><div>{rowData.deadNumbers}</div>}
+        { title: 'vehiculeType', field : 'vehiculeType', render: rowData => <div>{rowData.vehiculeType}</div> },
+
     ]
 
     const options={
-            grouping : true,
-            search : true
+        grouping : true,
+        search : true
     }
 
     return(
         <React.Fragment>
             <div className="page-content">
                 <MetaTags>
-                    <title>Accidents | HIS ALGERIA</title>
+                    <title>Trafic Checkin | HIS ALGERIA</title>
                 </MetaTags>
                 <Container fluid>
                     {/* Render Breadcrumb */}
@@ -55,7 +54,7 @@ const Accidents =()=>{
                                             <Link to="/dashboard">Dashboard</Link>
                                         </BreadcrumbItem>
                                         <BreadcrumbItem active>
-                                            <Link to="#">Accidents</Link>
+                                            <Link to={"#"}>Trafic Checkin</Link>
                                         </BreadcrumbItem>
                                     </ol>
                                 </div>
@@ -63,7 +62,7 @@ const Accidents =()=>{
                         </Col>
                     </Row>
                     <MaterialTable
-                        title={`Accidents History for the segment : ${segmentId}`}
+                        title={`Trafic Checkin History for the segment : ${segmentId}`}
                         icons={tableIcons}
                         localization={tableLang}
                         columns={columns}
@@ -76,4 +75,4 @@ const Accidents =()=>{
     )
 }
 
-export default withTranslation()(Accidents);
+export default withTranslation()(TraficCheckin);

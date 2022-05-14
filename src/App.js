@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from "react"
 
 import { Switch, BrowserRouter as Router } from "react-router-dom"
-import { connect } from "react-redux"
+import {connect, useDispatch} from "react-redux"
 
 // Import Routes all
 import { authProtectedRoutes, publicRoutes } from "./routes"
@@ -22,6 +22,9 @@ import "./assets/scss/theme.scss"
 // import { initFirebaseBackend } from "./helpers/firebase_helper"
 
 import fakeBackend from "./helpers/AuthType/fakeBackend"
+import {useEffect} from "react";
+import {fetchGetBounds} from "./store/bounds/actions";
+import {fetchGetSegments} from "./store/segments/actions";
 
 // Activating fake backend
 fakeBackend()
@@ -54,6 +57,17 @@ const App = props => {
     }
     return layoutCls
   }
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchGetBounds())
+        .then(()=>{
+          dispatch(fetchGetSegments())
+        })
+    // setTimeout(() => {
+    //   setSubscribemodal(true);
+    // }, 2000);
+  }, []);
 
   const Layout = getLayout()
   return (

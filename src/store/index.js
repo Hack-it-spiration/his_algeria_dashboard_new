@@ -6,7 +6,10 @@ import rootSaga from "./sagas"
 import logger from 'redux-logger'
 const sagaMiddleware = createSagaMiddleware()
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-const middlewares = [sagaMiddleware, logger]
+import thunk from 'redux-thunk';
+
+const middlewares = [sagaMiddleware, logger , thunk]
+
 const store = createStore(
   rootReducer,
   composeEnhancers(applyMiddleware(...middlewares))

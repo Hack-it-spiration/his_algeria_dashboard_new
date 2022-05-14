@@ -170,11 +170,17 @@ import ContactsGrid from "../pages/Contacts/contacts-grid"
 import ContactsList from "../pages/Contacts/ContactList/contacts-list"
 import ContactsProfile from "../pages/Contacts/ContactsProfile/contacts-profile"
 import Accidents from "../pages/Dashboard/Accidents";
+import TraficCheckIn from "../pages/Dashboard/TraficCheckIn";
+import RoadStatus from "../pages/Dashboard/RoadStatus";
+import WeatherHistory from "../pages/Dashboard/WeatherHistory";
 
 // severity , startTime , endTime , segment , location
 const authProtectedRoutes = [
   { path: "/dashboard", component: Dashboard },
-  { path : "/dash", component : Accidents},
+  { path : "/dashboard/:segmentId/accidents", component : Accidents},
+  { path : "/dashboard/:segmentId/traficCheckIn", component : TraficCheckIn},
+  { path : "/dashboard/:segmentId/roadStatus", component : RoadStatus},
+  { path : "/dashboard/:segmentId/weather", component : WeatherHistory},
   { path: "/dashboard-saas", component: DashboardSaas },
   { path: "/dashboard-crypto", component: DashboardCrypto },
   { path: "/blog", component: Blog },

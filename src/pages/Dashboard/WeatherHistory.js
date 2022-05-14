@@ -9,39 +9,48 @@ import {withTranslation} from "react-i18next";
 import {Add, AddBox} from "@material-ui/icons";
 import moment from "moment";
 
-const data=[
+const data=
     {
-        time : new Date(),
-        accidentType : "CAR-CAR",
-        severity : 3,
-        vehiculesNumbers : 6,
-        injuriesNumbers : 5,
-        deadNumbers : 5
+        startBoundId : "Bound1",
+        startBoundHistory : [
+            {
+                time : new Date(),
+                weather : {
+                    temperature : 27,
+                    humidity : 40
+                }}
+        ],
+        endBoundId : "Bound2",
+        endBoundHistory : [
+            {
+                time : new Date(),
+                weather : {
+                    temperature : 27,
+                    humidity : 40
+                }}
+        ],
     }
-]
 
-const Accidents =()=>{
+
+const weatherHistory =()=>{
     let { segmentId } = useParams();
     const columns= [
         { title: 'Time',  render: rowData => <div>{moment(rowData.time).format('llll')}</div> },
         // { title: 'Segment', field: 'name' },
-        { title: 'Accident Type', field : 'accidentType', render: rowData => <div>{rowData.accidentType}</div> },
-        { title: 'Severity', render : rowData => <div>{rowData.severity}</div> },
-        { title : 'Vehicules Numbers' , render : rowData=><div>{rowData.vehiculesNumbers}</div>},
-        { title : 'Injuries Numbers' , render : rowData=><div>{rowData.injuriesNumbers}</div> },
-        { title : 'Dead Numbers' , render : rowData=><div>{rowData.deadNumbers}</div>}
+        { title: 'Temperature', render: rowData => <div>{rowData.weather.temperature}</div> },
+        { title: 'Humidity',  render: rowData => <div>{rowData.weather.humidity}</div> },
     ]
 
     const options={
-            grouping : true,
-            search : true
+        grouping : true,
+        search : true
     }
 
     return(
         <React.Fragment>
             <div className="page-content">
                 <MetaTags>
-                    <title>Accidents | HIS ALGERIA</title>
+                    <title>Weather History | HIS ALGERIA</title>
                 </MetaTags>
                 <Container fluid>
                     {/* Render Breadcrumb */}
@@ -55,7 +64,7 @@ const Accidents =()=>{
                                             <Link to="/dashboard">Dashboard</Link>
                                         </BreadcrumbItem>
                                         <BreadcrumbItem active>
-                                            <Link to="#">Accidents</Link>
+                                            <div>Weather History</div>
                                         </BreadcrumbItem>
                                     </ol>
                                 </div>
@@ -63,17 +72,28 @@ const Accidents =()=>{
                         </Col>
                     </Row>
                     <MaterialTable
-                        title={`Accidents History for the segment : ${segmentId}`}
+                        title={`Start Bound weather history , Segment : ${segmentId}  , startBound : ${data.startBoundId}`}
                         icons={tableIcons}
                         localization={tableLang}
                         columns={columns}
-                        data={data}
+                        data={data.startBoundHistory}
                         options={options}
                     />
+                    <div style={{marginTop : "3rem"}}>
+                        <MaterialTable
+                            title={`End Bound weather history , Segment : ${segmentId}  , endBound : ${data.endBoundId}`}
+                            icons={tableIcons}
+                            localization={tableLang}
+                            columns={columns}
+                            data={data.endBoundHistory}
+                            options={options}
+                        />
+                    </div>
+
                 </Container>
             </div>
         </React.Fragment>
     )
 }
 
-export default withTranslation()(Accidents);
+export default withTranslation()(weatherHistory);

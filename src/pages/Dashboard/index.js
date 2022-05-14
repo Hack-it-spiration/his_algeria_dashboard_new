@@ -44,74 +44,86 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import {useEffect} from "react";
 //redux
 import { useSelector, useDispatch } from "react-redux";
-const bounds=[{
-  label : 'Bound1',
-  id : 'Bound1',
-  position : {
-    lat : 48.5584,
-    lng: 2.2945
-  },
-  speed : '75',
-  heat : '55',
-  AM : {
-    fullName : 'Metidji Sid Ahmed',
-    email : 'is_metidji@esi.dz'
-  }
+import BasicCard from "./card";
+import DetailCharts from "./indexCharts"
+import Accidents from "./Accidents";
+import TraficCheckIn from "./TraficCheckIn";
+import RoadStatus from "./RoadStatus";
+import WeatherHistory from "./WeatherHistory";
+import {fetchGetBounds} from "../../store/bounds/actions";
+import {fetchGetSegments} from "../../store/segments/actions";
 
-}, {
-  label : 'Bound2',
-  id : 'Bound2',
-  position : {
-    lat : 48.8570,
-    lng: 2.2730
-  },
-  speed : '20',
-  heat : '20',
-  AM : {
-    fullName : 'Youcef belaili',
-    email : 'iy_belaili@esi.dz'
-  }
-},{
-  label : 'Bound3',
-  id : 'Bound3',
-  position : {
-    lat : 48.7570,
-    lng: 2.2330
-  },
-  speed : '35K',
-  heat : '40',
-  AM : {
-    fullName : 'Joe Goldberg',
-    email : 'ij_goldberg@esi.dz'
-  }
-} ,{
-  label: 'Bound4',
-  id : 'Bound4',
-  position : {
-    lat : 48.7230,
-    lng: 2.2550
-  },
-  speed : '45',
-  heat : '65',
-  AM : {
-    fullName : 'Eren Yeager',
-    email : 'ie_yeager@esi.dz'
-  }
-}
-]
+// const bounds=[{
+//   label : 'Bound1',
+//   id : 'Bound1',
+//   position : {
+//     lat : 48.5584,
+//     lng: 2.2945
+//   },
+//   speed : '75',
+//   heat : '55',
+//   AM : {
+//     fullName : 'Metidji Sid Ahmed',
+//     email : 'is_metidji@esi.dz'
+//   }
+//
+// }, {
+//   label : 'Bound2',
+//   id : 'Bound2',
+//   position : {
+//     lat : 48.8570,
+//     lng: 2.2730
+//   },
+//   speed : '20',
+//   heat : '20',
+//   AM : {
+//     fullName : 'Youcef belaili',
+//     email : 'iy_belaili@esi.dz'
+//   }
+// },{
+//   label : 'Bound3',
+//   id : 'Bound3',
+//   position : {
+//     lat : 48.7570,
+//     lng: 2.2330
+//   },
+//   speed : '35K',
+//   heat : '40',
+//   AM : {
+//     fullName : 'Joe Goldberg',
+//     email : 'ij_goldberg@esi.dz'
+//   }
+// } ,{
+//   label: 'Bound4',
+//   id : 'Bound4',
+//   position : {
+//     lat : 48.7230,
+//     lng: 2.2550
+//   },
+//   speed : '45',
+//   heat : '65',
+//   AM : {
+//     fullName : 'Eren Yeager',
+//     email : 'ie_yeager@esi.dz'
+//   }
+// }
+// ]
 
-const segments=[
-    {
-      name : "Segment 1",
-      boundStartId : 'Bound1',
-      boundEndId : 'Bound2'
-    },
-    {
-      name : "Segment 2",
-      boundStartId : 'Bound2',
-      boundEndId : 'Bound3'
-    }
-]
+// const segments=[
+//     {
+//       id : "segment1",
+//       name : "Segment 1",
+//       boundStartId : 'Bound1',
+//       boundEndId : 'Bound2'
+//     },
+//     {
+//       id : "segment2",
+//       name : "Segment 2",
+//       boundStartId : 'Bound2',
+//       boundEndId : 'Bound3'
+//     }
+// ]
+
 const  CarsWindowInfo=()=>{
   return <h1>CARS WINDOW INFO</h1>
 }
@@ -121,14 +133,22 @@ const Dashboard = props => {
   const [modal, setmodal] = useState(false);
   const [subscribemodal, setSubscribemodal] = useState(false);
 
-
+  const dispatch = useDispatch();
   const { chartsData } = useSelector(state => ({
     chartsData: state.Dashboard.chartsData
   }));
 
+  const boundsReducer = useSelector(state => state.boundsReducer);
+  const segmentsReducer = useSelector(state => state.segmentsReducer);
+  const {isLoaded}= useJsApiLoader({
+    googleMapsApiKey : "AIzaSyDwCTYOj2SWL6bt2rz_k8_bcXirZtJNB3g",
+    libraries: ['places']
+  })
+
+
   const [WindowInfoStatus, setWindowInfoStatus] = useState({
     isOpen : false ,
-    car: bounds[0]
+    car: null
   });
   const [directionsResponse, setDirectionsResponse] = useState(null);
 
@@ -141,37 +161,42 @@ const Dashboard = props => {
   const originRef = useRef()
   /** @type React.MutableRefObject<HTMLInputElement> */
   const destiantionRef = useRef()
-  const {isLoaded}= useJsApiLoader({
-    googleMapsApiKey : "AIzaSyDwCTYOj2SWL6bt2rz_k8_bcXirZtJNB3g",
-    libraries: ['places']
-  })
 
-  useEffect(() => {
-    setTimeout(() => {
-      setSubscribemodal(true);
-    }, 2000);
-  }, []);
+  // const dispatch = useDispatch();
+  //
+  // useEffect(() => {
+  //   dispatch(fetchGetBounds())
+  //       .then(()=>{
+  //         dispatch(fetchGetSegments())
+  //       })
+  //   // setTimeout(() => {
+  //   //   setSubscribemodal(true);
+  //   // }, 2000);
+  // }, []);
 
   const [periodData, setPeriodData] = useState([]);
   const [periodType, setPeriodType] = useState("yearly");
-
+  const [actaulTitleCharts , setActualTitleCharts]=useState('Number of Cars per day')
   useEffect(() => {
     setPeriodData(chartsData);
   }, [chartsData]);
+
 
   const onChangeChartPeriod = pType => {
     setPeriodType(pType);
     dispatch(onGetChartsData(pType));
   };
 
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(onGetChartsData("yearly"));
   }, [dispatch]);
-
+  const [actualSegment , setActualSegment]=useState(null);
   useEffect(()=>{
     if(actualBoundStart && actualBoundEnd){
       calculateRoute();
+      let choosenSegment = segmentsReducer.data.filter(segment=>segment.start===actualBoundStart.uuid && segment.end === actualBoundEnd.uuid )[0];
+      setActualSegment(choosenSegment);
+
     }else{
       setDirectionsResponse(null);
     }
@@ -180,13 +205,13 @@ const Dashboard = props => {
   const calculateCenterMap=()=>{
     let sumlat = 0;
     let sumlng = 0;
-    bounds.forEach(car=>{
-      sumlat += car.position.lat;
-      sumlng += car.position.lng;
+    boundsReducer.data.forEach(car=>{
+      sumlat += car.location[0];
+      sumlng += car.location[1];
     })
     return  {
-      lat : sumlat/bounds.length,
-      lng: sumlng/bounds.length
+      lat : sumlat/boundsReducer.data.length,
+      lng: sumlng/boundsReducer.data.length
     }
   }
 
@@ -197,8 +222,8 @@ const Dashboard = props => {
     // eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService()
     const results = await directionsService.route({
-      origin: new  window.google.maps.LatLng( actualBoundStart.position.lat , actualBoundStart.position.lng),
-      destination: new window.google.maps.LatLng( actualBoundEnd.position.lat , actualBoundEnd.position.lng),
+      origin: new  window.google.maps.LatLng( actualBoundStart.location[0] , actualBoundStart.location[1]),
+      destination: new window.google.maps.LatLng( actualBoundEnd.location[0] , actualBoundEnd.location[1]),
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     })
@@ -207,18 +232,6 @@ const Dashboard = props => {
     setDuration(results.routes[0].legs[0].duration.text)
   }
 
-  if(!isLoaded){
-    return(
-        <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open
-            // onClick={handleClose}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-    )
-
-  }
   const setInfoWindowData=( car )=>{
     setWindowInfoStatus( oldState=>{  return {...oldState , isOpen : true , car: car} })
   }
@@ -229,13 +242,13 @@ const Dashboard = props => {
       return 1
     }
     // if that bound is either the start or the end
-      if(bound.id===actualBoundStart?.id || bound.id===actualBoundEnd?.id){
+      if(bound.uuid===actualBoundStart?.uuid || bound.uuid===actualBoundEnd?.uuid){
         return 1
       }
 
     // the started bound is different  and the end bound is not defined yet
     if(actualBoundStart && !actualBoundEnd){
-          const potentialSegments= segments.filter(segment=>( segment.boundStartId===actualBoundStart.id && segment.boundEndId===bound.id));
+          const potentialSegments= segmentsReducer.data.filter(segment=>( segment.start===actualBoundStart.uuid && segment.end===bound.uuid));
           return potentialSegments.length ? 1 : 0.3
     }
     // the start and the end bound are specified but the actual bound isn't one of them
@@ -246,11 +259,11 @@ const Dashboard = props => {
 
   }
   const getPotentialEndBoundsOfGivenStartBound=()=>{
-      if(!actualBoundStart) {return null}
+      if(!actualBoundStart) {return []}
       else{
-        let endBoundsId= segments.filter(segment=>segment.boundStartId ===actualBoundStart.id).map(segment=>segment.boundEndId);
+        let endBoundsId= segmentsReducer.data.filter(segment=>segment.start ===actualBoundStart.uuid).map(segment=>segment.end);
         console.log("END BOUNDS ID =",endBoundsId)
-        return bounds.filter(bound=>endBoundsId.includes(bound.id));
+        return boundsReducer.data.filter(bound=>endBoundsId.includes(bound.uuid));
       }
   }
   const updateBounds=(clickedBound)=>{
@@ -258,7 +271,7 @@ const Dashboard = props => {
       setActualBoundStart(clickedBound)
     }else if(actualBoundStart && !actualBoundEnd){
       // disable the selection
-      if(actualBoundStart.id===clickedBound.id){
+      if(actualBoundStart.uuid===clickedBound.uuid){
         setActualBoundStart(null)
       }else{
         setActualBoundEnd(clickedBound)
@@ -271,6 +284,19 @@ const Dashboard = props => {
       setDirectionsResponse(null);
     }
   }
+  if(!isLoaded || boundsReducer.loading || segmentsReducer.loading ){
+    return(
+        <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open
+            // onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+    )
+
+  }
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -294,7 +320,7 @@ const Dashboard = props => {
                     setActualBoundStart(newValue);
                   }}
                   id="controllable-states-demo"
-                  options={bounds}
+                  options={boundsReducer.data}
                   sx={{ width: 300 }}
                   renderInput={(params) => <TextField {...params} label="start bound" />}
               />
@@ -317,7 +343,7 @@ const Dashboard = props => {
 
           <GoogleMap
               style={{height : '100%'}}
-              center={ WindowInfoStatus.isOpen ? WindowInfoStatus.car.position :  calculateCenterMap()}
+              center={ WindowInfoStatus.isOpen ?  { lat : WindowInfoStatus.car.location[0] , lng : WindowInfoStatus.car.location[1] }  :  calculateCenterMap()}
               zoom={10}
               mapContainerStyle={{width : '100%' , height : '80vh'}}
               options={{
@@ -327,14 +353,16 @@ const Dashboard = props => {
                 fullscreenControl: false
               }}
           >
-            {bounds.map(bound=>{
+            {boundsReducer.data.map(bound=>{
               return(
-                  <Marker key={bound.label} position={bound.position}
-                          label={{
+                  <Marker key={bound.uuid} position={ { lat : bound.location[0] , lng : bound.location[1]}}
+                          label={()=>{
                             // text: car.name,
                             // fontFamily: "Material Icons",
-                            color: "#ffffff",
-                            fontSize: "10px",
+                            return{
+                              color: "#ffffff",
+                              fontSize: "10px",
+                            }
                           }}
                           opacity={calculateBoundMarkerOpacity(bound)}
                           disabled={calculateBoundMarkerOpacity(bound)!==1}
@@ -390,12 +418,38 @@ const Dashboard = props => {
             {directionsResponse && (
                 <DirectionsRenderer directions={directionsResponse} />
             )}          </GoogleMap>
+          {actualSegment && (
+              <React.Fragment>
+                <div style={stylingObject.cardContainer}>
+                  <BasicCard changeTitle={setActualTitleCharts} name={'Véhicule'} info={'200 / jour'} link={`/dashboard/${actualSegment.uuid}/traficCheckIn`}/>
+                  <BasicCard changeTitle={setActualTitleCharts} name={'Metéo'} info={'Tres Bien'} link={`/dashboard/${actualSegment.uuid}/weather`}/>
+                  <BasicCard changeTitle={setActualTitleCharts} name={'Etat de route'} info={'Risqué'} link={`/dashboard/${actualSegment.uuid}/roadStatus`} />
+                  <BasicCard changeTitle={setActualTitleCharts} name={'Accident'} info={'En danger'} link={`/dashboard/${actualSegment.uuid}/accidents`} />
+                </div>
+                <DetailCharts title={actaulTitleCharts}/>
+              </React.Fragment>
+
+
+          )}
+
+
+
         </Container>
+
       </div>
     </React.Fragment>
   );
 };
 
+let stylingObject = {
+  cardContainer: {
+    color: "red",
+    display: 'flex',
+    flexDirection : 'row',
+    justifyContent: 'center',
+    maxWidth : '90vw'
+  }
+}
 Dashboard.propTypes = {
   t: PropTypes.any,
   chartsData: PropTypes.any,

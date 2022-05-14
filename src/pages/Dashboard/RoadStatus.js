@@ -12,36 +12,28 @@ import moment from "moment";
 const data=[
     {
         time : new Date(),
-        accidentType : "CAR-CAR",
-        severity : 3,
-        vehiculesNumbers : 6,
-        injuriesNumbers : 5,
-        deadNumbers : 5
+        roadStatus : 5
     }
 ]
 
-const Accidents =()=>{
+const RoadStatus =()=>{
     let { segmentId } = useParams();
     const columns= [
         { title: 'Time',  render: rowData => <div>{moment(rowData.time).format('llll')}</div> },
         // { title: 'Segment', field: 'name' },
-        { title: 'Accident Type', field : 'accidentType', render: rowData => <div>{rowData.accidentType}</div> },
-        { title: 'Severity', render : rowData => <div>{rowData.severity}</div> },
-        { title : 'Vehicules Numbers' , render : rowData=><div>{rowData.vehiculesNumbers}</div>},
-        { title : 'Injuries Numbers' , render : rowData=><div>{rowData.injuriesNumbers}</div> },
-        { title : 'Dead Numbers' , render : rowData=><div>{rowData.deadNumbers}</div>}
+        { title: 'road Status', field : 'roadStatus', render: rowData => <div>{rowData.roadStatus}</div> },
     ]
 
     const options={
-            grouping : true,
-            search : true
+        grouping : true,
+        search : true
     }
 
     return(
         <React.Fragment>
             <div className="page-content">
                 <MetaTags>
-                    <title>Accidents | HIS ALGERIA</title>
+                    <title>Road Status | HIS ALGERIA</title>
                 </MetaTags>
                 <Container fluid>
                     {/* Render Breadcrumb */}
@@ -55,7 +47,7 @@ const Accidents =()=>{
                                             <Link to="/dashboard">Dashboard</Link>
                                         </BreadcrumbItem>
                                         <BreadcrumbItem active>
-                                            <Link to="#">Accidents</Link>
+                                            <div>Road Status</div>
                                         </BreadcrumbItem>
                                     </ol>
                                 </div>
@@ -76,4 +68,4 @@ const Accidents =()=>{
     )
 }
 
-export default withTranslation()(Accidents);
+export default withTranslation()(RoadStatus);
