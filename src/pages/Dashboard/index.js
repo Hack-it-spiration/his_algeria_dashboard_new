@@ -322,7 +322,7 @@ const Dashboard = props => {
                   id="controllable-states-demo"
                   options={boundsReducer.data}
                   sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} label="start bound" />}
+                  renderInput={(params) => <TextField {...params} label="Choose start bound ..." />}
               />
             </div>
             <div id={"endBoundInput"}>
@@ -335,7 +335,7 @@ const Dashboard = props => {
                   id="controllable-states-demo"
                   options={getPotentialEndBoundsOfGivenStartBound()}
                   sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} label="end bound" />}
+                  renderInput={(params) => <TextField {...params} label="Choose end bound" />}
               />
             </div>
           </div>

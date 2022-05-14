@@ -10,7 +10,7 @@ import SidebarContent from "./SidebarContent";
 import { Link } from "react-router-dom";
 
 import logo from "../../assets/images/smart_way_logo.png";
-
+import logoSm from "../../assets/images/smart_way_logo_small.png"
 
 const Sidebar = props => {
 
@@ -20,7 +20,7 @@ const Sidebar = props => {
         <div className="navbar-brand-box">
           <Link to="/" className="logo logo-dark">
             <span className="logo-sm">
-              <img src={logo} alt="" height="22" />
+              <img src={logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
               <img src={logo} alt="" height="70" />
@@ -29,7 +29,7 @@ const Sidebar = props => {
 
           <Link to="/" className="logo logo-light">
             <span className="logo-sm">
-              <img src={logo} alt="" height="22" />
+              <img src={logoSm} alt="" height="22" />
             </span>
             <span className="logo-lg">
               <img src={logo} alt="" height="70" />
