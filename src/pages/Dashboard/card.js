@@ -19,6 +19,12 @@ const bull = (
 );
 let colorCard = {green : '#a2cf6e', yellow : '#ffeb3b', blue : '#03a9f4', red: '#ed4b82'};
 export default function BasicCard(props) {
+    const severitiesCorresponds={
+        1 : '#a2cf6e',
+        2 : '#03a9f4',
+        3 : '#ffeb3b',
+        4 : '#ed4b82'
+    }
     return (
 
         <Card sx={{ width: '20%' , margin: '20px' , backgroundColor : colorCard.green}}>

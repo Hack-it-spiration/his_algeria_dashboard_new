@@ -420,10 +420,10 @@ const Dashboard = props => {
           {actualSegment && (
               <React.Fragment>
                 <div style={stylingObject.cardContainer}>
-                  <BasicCard changeTitle={setActualTitleCharts} name={'Véhicule'} info={'200 / jour'} link={`/dashboard/${actualSegment.uuid}/traficCheckIn`}/>
-                  <BasicCard changeTitle={setActualTitleCharts} name={'Metéo'} info={'Tres Bien'} link={`/dashboard/${actualSegment.uuid}/weather`}/>
-                  <BasicCard changeTitle={setActualTitleCharts} name={'Etat de route'} info={'Risqué'} link={`/dashboard/${actualSegment.uuid}/roadStatus`} />
-                  <BasicCard changeTitle={setActualTitleCharts} name={'Accident'} info={'En danger'} link={`/dashboard/${actualSegment.uuid}/accidents`} />
+                  <BasicCard severity={1} changeTitle={setActualTitleCharts} name={'Véhicule'} info={'200 / heure'} link={`/dashboard/${actualSegment.uuid}/traficCheckIn`}/>
+                  <BasicCard severity={1} changeTitle={setActualTitleCharts} name={'Metéo'} info={'Tres Bien'} link={`/dashboard/${actualSegment.uuid}/weather`}/>
+                  <BasicCard severity={3} changeTitle={setActualTitleCharts} name={'Etat de route'} info={'Risqué'} link={`/dashboard/${actualSegment.uuid}/roadStatus`} />
+                  <BasicCard  severity={4} changeTitle={setActualTitleCharts} name={'Accident'} info={'En danger'} link={`/dashboard/${actualSegment.uuid}/accidents`} />
                 </div>
                 <DetailCharts title={actaulTitleCharts}/>
               </React.Fragment>
