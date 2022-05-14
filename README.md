@@ -1,0 +1,13 @@
+## Smart Way Dashboard
+
+This Dashbaord is a 34 hours work for the CSE famous hackathon HACK !T in its 3rd edition 2022. [Link to event website](https://cse-hackit-2k22.cse.club/?fbclid=IwAR3mTsmTSrF91ot9eii6jG55SYlqSoPK5IoJvoXt3-ZRPgeSyOfutvy8nYo).
+Smart Way is a roads and highways intellegent system API that exposes pages for:  
+
+* Road checkpoints and segments 
+* Prediction of trafic rate/ weather / roads health and  accidants severity in the segments
+* Explore the schemas datasets ( gathered from Smart way API )  in form of data tables 
+
+
+## Deployment
+
+The Dashboard  is publicaly available  [this link](https://haick-smart-way-dashboard.vercel.app/)
