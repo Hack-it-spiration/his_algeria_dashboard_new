@@ -31,7 +31,7 @@ export const fetchGetSegments = () => (dispatch) => {
     };
     return new Promise((resolve, reject) => {
         axios
-            .get(SERVER+"/segments?page=0&pageSize=2", options)
+            .get(SERVER+"/segments?page=0&pageSize=40", options)
             .then((res) => {
                 console.log("RESPONSE SUCCESS =", res);
                 dispatch(getSegmentsSuccess(res.data.data, dispatch));

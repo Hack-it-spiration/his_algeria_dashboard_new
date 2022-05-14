@@ -74,10 +74,11 @@ const App = props => {
     <React.Fragment>
       <Router>
         <Switch>
+
           {publicRoutes.map((route, idx) => (
             <Authmiddleware
               path={route.path}
-              layout={NonAuthLayout}
+              layout={Layout}
               component={route.component}
               key={idx}
               isAuthProtected={false}

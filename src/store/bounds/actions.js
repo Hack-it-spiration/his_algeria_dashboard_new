@@ -31,7 +31,7 @@ export const fetchGetBounds = () => (dispatch) => {
     };
     return new Promise((resolve, reject) => {
         axios
-            .get(SERVER+"/checkpoints?page=0&pageSize=10", options)
+            .get(SERVER+"/checkpoints?page=0&pageSize=20", options)
             .then((res) => {
                 console.log("RESPONSE SUCCESS =", res);
                 dispatch(getBoundsSuccess(res.data.data, dispatch));
