@@ -4,12 +4,7 @@ import { combineReducers } from "redux"
 import Layout from "./layout/reducer"
 import Profile from "./auth/profile/reducer"
 
-//E-commerce
-import ecommerce from "./e-commerce/reducer"
 
-
-//invoices
-import invoices from "./invoices/reducer"
 
 //projects
 import projects from "./projects/reducer"
