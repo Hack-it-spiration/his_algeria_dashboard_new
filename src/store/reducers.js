@@ -7,10 +7,6 @@ import Profile from "./auth/profile/reducer"
 //E-commerce
 import ecommerce from "./e-commerce/reducer"
 
-//Calendar
-
-//chat
-import chat from "./chat/reducer"
 
 //crypto
 import crypto from "./crypto/reducer"
