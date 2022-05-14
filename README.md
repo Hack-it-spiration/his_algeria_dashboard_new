@@ -5,7 +5,7 @@ Smart Way is a roads and highways intellegent system API that exposes pages for:
 
 * Road checkpoints and segments 
 * Prediction of trafic rate/ weather / roads health and  accidants severity in the segments
-* Explore the schemas datasets ( gathered from Smart way API )  in form of data tables 
+* Explore the segments datasets ( gathered from Smart way API )  in form of data tables 
 
 
 ## Deployment
